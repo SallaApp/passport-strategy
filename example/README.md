@@ -2,7 +2,7 @@
 
 If you want to run the project, create a Salla app on [Salla Partner Portal](https://salla.partners/login).
 
-1. Add `http://localhost/auth/salla/callback` as a redirect URI to your app profile.
+1. Add `http://localhost/oauth/callback` as a redirect URI to your app profile.
 1. Create a `.env` file with the following:
 
    ```
