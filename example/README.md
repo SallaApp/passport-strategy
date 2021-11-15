@@ -2,7 +2,7 @@
 
 If you want to run the project, create a Salla app on [Salla Partner Portal](https://salla.partners/login).
 
-1. Add `http://localhost/oauth/callback` as a redirect URI to your app profile.
+1. Add `http://localhost:8081/oauth/callback` as a redirect URI to your app profile.
 1. Create a `.env` file with the following:
 
    ```
@@ -23,4 +23,4 @@ If you want to run the project, create a Salla app on [Salla Partner Portal](htt
    node app.js
    ```
 
-1. Navigate to `http://localhost/`.
+1. Navigate to `http://localhost:8081`.
