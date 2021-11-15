@@ -110,7 +110,7 @@ SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
   .catch((err) => res.send(err));
 ```
 
-For a complete, working example, refer to the [login example]
+For a complete, working example, refer to the [login example](##Examples)
 
 You can get your keys on [Salla Partner - My Applications](https://salla.partners/apps/[APP_ID]).
 
