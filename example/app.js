@@ -70,20 +70,20 @@ app.use(express.static(__dirname + "/public"));
 
 app.engine("html", consolidate.nunjucks);
 
-// GET /auth/salla
+// GET /oauth/redirect
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request. The first step in salla authentication will involve redirecting
 //   the user to accounts.salla.sa. After authorization, salla will redirect the user
-//   back to this application at /auth/salla/callback
-app.get("/auth/salla", passport.authenticate("salla"));
+//   back to this application at /oauth/callback
+app.get("/oauth/redirect", passport.authenticate("salla"));
 
-// GET /auth/salla/callback
+// GET /oauth/callback
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request. If authentication fails, the user will be redirected back to the
 //   login page. Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 app.get(
-  "/auth/salla/callback",
+  "/oauth/callback",
   passport.authenticate("salla", { failureRedirect: "/login" }),
   function (req, res) {
     res.redirect("/");
