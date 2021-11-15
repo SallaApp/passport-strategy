@@ -4,7 +4,7 @@
     <img src="https://salla.dev/wp-content/themes/salla-portal/dist/img/salla-logo.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Passport-Salla</h3>
+<h3 align="center">Salla OAuth 2.0 - Passport Strategy</h3>
   <p align="center">
     <a href="http://passportjs.org/">Passport</a> strategy is used with <a href="http://salla.sa/">Salla</a> as an authentication middleware module
 using the OAuth 2.0 API.
