@@ -39,7 +39,7 @@ const SallaAPI = new SallaAPIFactory({
   clientID: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   // Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-  callbackURL: "http://localhost/auth/salla/callback",
+  callbackURL: "http://localhost:8081/auth/salla/callback",
 });
 
 //   Use the Salla Strategy within Passport.
