@@ -6,7 +6,7 @@
 
 <h3 align="center">Passport-Sallat</h3>
   <p align="center">
-    ![Passport](http://passportjs.org/) strategy is used with ![Salla](https://salla.sa/) as an authentication middleware module
+    [Passport](http://passportjs.org/) strategy is used with [Salla](https://salla.sa/) as an authentication middleware module
 using the OAuth 2.0 API.
     <br />
     <a href="https://docs.salla.dev/"><strong>Explore our blogs »</strong></a>
@@ -19,7 +19,7 @@ using the OAuth 2.0 API.
 
 This module enables you to implement the authentication process using Salla within your Nodejs applications. 
 By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application 
-or framework that supports ![connect-style](http://www.senchalabs.org/connect/) middleware, including ![Express.js](http://expressjs.com/), by plugging it into Passport.
+or framework that supports [connect-style](http://www.senchalabs.org/connect/) middleware, including [Express.js](http://expressjs.com/), by plugging it into Passport.
 
 For more information about Salla's OAuth 2.0 implementation, check our
 [Web API Authorization Guide](https://salla.dev/blog/oauth-2-0-in-action-with-salla).
