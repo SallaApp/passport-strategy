@@ -9,7 +9,7 @@
     <a href="http://passportjs.org/">Passport</a> strategy is used with <a href="http://salla.sa/">Salla</a> as an authentication middleware module
 using the OAuth 2.0 API.
     <br />
-    <a href="https://docs.salla.dev/"><strong>Explore our blogs »</strong></a>
+    <a href="https://salla.dev/"><strong>Explore our blogs »</strong></a>
     <br />
     <br /><a href="https://github.com/SallaApp/passport-salla/issues/new">Report Bug</a> · <a href="https://github.com/SallaApp/passport-salla/discussions/new">Request Feature</a>
   </p>
