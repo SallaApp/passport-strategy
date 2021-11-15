@@ -15,7 +15,7 @@ using the OAuth 2.0 API.
   </p>
 </div>
 
-# Passport-Salla
+# Passport Strategy
 
 This module enables you to implement the authentication process using Salla within your Nodejs applications. 
 By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application 
