@@ -98,7 +98,7 @@ app.listen(port, function () {
 
 ## Refreshing a Token
 
-Refresh tokens can be received by calling API.refreshToken() function, which returns a Promies.
+Refresh tokens can be received by calling SallaAPI.refreshToken() function, which returns a Promies.
 
 ```javascript
 const SallaAPI = require("passport-salla");
@@ -110,7 +110,7 @@ SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
   .catch((err) => res.send(err));
 ```
 
-For a complete, working example, refer to the [login example](##Examples)
+For a complete, working example, refer to the [login example](#Examples)
 
 You can get your keys on [Salla Partner - My Applications](https://salla.partners/apps/[APP_ID]).
 
