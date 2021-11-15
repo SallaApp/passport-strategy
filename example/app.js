@@ -16,8 +16,7 @@ require("dotenv").config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
-// Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-const port = 80;
+const port = 8081;
 
 //   Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
