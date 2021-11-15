@@ -1,13 +1,25 @@
+<div id="top"></div>
+<div align="center">
+  <a href="https://salla.dev">
+    <img src="https://salla.dev/wp-content/themes/salla-portal/dist/img/salla-logo.svg" alt="Logo" width="80" height="80">
+  </a>
+
+<h3 align="center">Passport-Sallat</h3>
+  <p align="center">
+    [Passport](http://passportjs.org/) strategy is used with [Salla](https://salla.sa/) as an authentication middleware module
+using the OAuth 2.0 API.
+    <br />
+    <a href="https://docs.salla.dev/"><strong>Explore our blogs »</strong></a>
+    <br />
+    <br /><a href="#">Report Bug</a> · <a href="#">Request Feature</a>
+  </p>
+</div>
+
 # Passport-Salla
 
-[Passport](http://passportjs.org/) strategy for authenticating with [Salla](https://salla.sa/)
-using the OAuth 2.0 API.
-
-This module lets you authenticate using Salla in your Node.js applications.
-By plugging into Passport, Salla authentication can be easily and
-unobtrusively integrated into any application or framework that supports
-[Connect](http://www.senchalabs.org/connect/)-style middleware, including
-[Express](http://expressjs.com/).
+This module enables you to implement the authentication process using Salla within your Nodejs applications. 
+By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application 
+or framework that supports [connect](http://www.senchalabs.org/connect/)-style middleware, including [Express.js](http://expressjs.com/), by plugging it into Passport.
 
 For more information about Salla's OAuth 2.0 implementation, check our
 [Web API Authorization Guide](https://salla.dev/blog/oauth-2-0-in-action-with-salla).
@@ -20,13 +32,15 @@ For more information about Salla's OAuth 2.0 implementation, check our
 
     $ npm install passport-salla
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Usage
 
 ### Configure Strategy
 
-The Salla authentication strategy authenticates users using a Salla Merchant Account
-and OAuth 2.0 tokens. The strategy requires a `verify` callback, which accepts
-these credentials and calls `done` providing a user, as well as `options`
+Salla authentication strategy authenticates users using a Salla Merchant Account
+and OAuth 2.0 tokens. This strategy requires a `verify` callback, which accepts
+these credentials, and calls `done` providing a user as well as `options`
 specifying a client ID, client secret, and callback URL.
 
 ```javascript
@@ -80,9 +94,11 @@ app.listen(port, function () {
 });
 ```
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Refreshing a Token
 
-Refresh tokens by calling API.refreshToken() function it return a Promies
+Refresh tokens can be received by calling API.refreshToken() function, which returns a Promies.
 
 ```javascript
 const SallaAPI = require("passport-salla");
@@ -122,14 +138,30 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 });
 ```
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Tests
 
     $ npm install --dev
     $ npm test
+    
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. 
+Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. 
+You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Security
 
@@ -143,3 +175,5 @@ If you discover any security related issues, please email security@salla.sa inst
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
