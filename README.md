@@ -11,7 +11,7 @@ using the OAuth 2.0 API.
     <br />
     <a href="https://docs.salla.dev/"><strong>Explore our blogs »</strong></a>
     <br />
-    <br /><a href="#">Report Bug</a> · <a href="#">Request Feature</a>
+    <br /><a href="https://github.com/SallaApp/passport-salla/issues/new">Report Bug</a> · <a href="https://github.com/SallaApp/passport-salla/discussions/new">Request Feature</a>
   </p>
 </div>
 
@@ -57,7 +57,7 @@ const SallaAPI = new SallaAPIFactory({
   clientID: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   // Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-  callbackURL: "http://localhost/auth/salla/callback",
+  callbackURL: "http://localhost/oauth/callback",
 });
 
 //   Use the Salla Strategy within Passport.
@@ -74,7 +74,7 @@ app.get("/", function (req, res) {
 //   Use passport.authenticate() as route middleware to authenticate the
 //   request. The first step in salla authentication will involve redirecting
 //   the user to accounts.salla.sa. After authorization, salla will redirect the user
-//   back to this application at /auth/salla/callback
+//   back to this application at /oauth/callback
 app.get("/oauth/redirect", passport.authenticate("salla"));
 
 // GET /oauth/callback
