@@ -49,15 +49,14 @@ const passport = require("passport");
 const SallaAPIFactory = require("passport-salla");
 const app = express();
 
-// Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-const port = 80;
+const port = 8081;
 
 // we initialize our Salla API
 const SallaAPI = new SallaAPIFactory({
   clientID: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
   // Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-  callbackURL: "http://localhost/oauth/callback",
+  callbackURL: "http://localhost:8081/oauth/callback",
 });
 
 //   Use the Salla Strategy within Passport.
@@ -163,7 +162,7 @@ You can also simply open an issue with the tag "enhancement". Don't forget to gi
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-### Security
+## Security
 
 If you discover any securitysrelated issues, please email security@salla.sa instead of using the issue tracker.
 
