@@ -1,14 +1,17 @@
 # Login Example
 
-If you want to run the project, create a Salla app on [Salla Partner Portal](https://salla.partners/login).
+If you want to run the project
 
+1. Create a Salla app on [Salla Partner Portal](https://salla.partners/login).
 1. Add `http://localhost:8081/oauth/callback` as a redirect URI to your app profile.
 1. Rename the file `.env.exmaple` to  `.env` and filling with the following:
 
-```
-CLIENT_ID=
-CLIENT_SECRET=
-```
+
+   ```sh
+   CLIENT_ID=
+   CLIENT_SECRET=
+   ```
+
 
 1. Copy the client ID and client secret and paste them into the `.env`.
 1. Install the dependencies.
