@@ -8,6 +8,6 @@
     "express-session": "^1.17.1",
     "nunjucks": "^3.2.2",
     "passport": "~0.4.1",
-    "passport-salla": "../src/init.js"
+    "@salla.sa/passport-strategy": "~1.0"
   }
 }

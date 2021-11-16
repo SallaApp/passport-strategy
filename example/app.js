@@ -1,7 +1,7 @@
 const express = require("express"),
   session = require("express-session"),
   passport = require("passport"),
-  SallaAPIFactory = require("../src/init"),
+  SallaAPIFactory = require("@salla.sa/passport-strategy"),
   consolidate = require("consolidate");
 
 require("dotenv").config();
@@ -38,8 +38,7 @@ passport.deserializeUser(function (obj, done) {
 const SallaAPI = new SallaAPIFactory({
   clientID: CLIENT_ID,
   clientSecret: CLIENT_SECRET,
-  // Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-  callbackURL: "http://localhost:8081/auth/salla/callback",
+  callbackURL: "http://localhost:8081/oauth/callback",
 });
 
 //   Use the Salla Strategy within Passport.
@@ -140,11 +139,6 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
   });
 });
 
-// GET /login
-//  go to login page
-app.get("/login", function (req, res) {
-  res.render("login.html", { user: req.user, isLogin: req.user });
-});
 
 // GET /logout
 //   logout from passport
