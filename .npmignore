@@ -1,5 +1,9 @@
 node_modules/
 test
 examples
+examples/node_modules/
+.idea
 .gitignore
 .npmignore
+.git
+.github
