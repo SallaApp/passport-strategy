@@ -6,6 +6,7 @@ var util = require("util"),
   OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 
 const { generateRandomeString } = require("./helpers/generate-random-string");
+const {InternalOAuthError} = require('passport-oauth');
 /**
  * `Strategy` constructor.
  *
@@ -130,6 +131,31 @@ Strategy.prototype.userProfile = function (accessToken, done) {
       }
     }
   );
+};
+
+/**
+ * Return extra specific parameters to be included in the authorization
+ * request.
+ *
+ * Options:
+ *  - `showDialog` Whether or not to force the user to approve the app again if
+ *     they’ve already done so. If false (default), a user who has already
+ *     approved the application may be automatically redirected to the URI
+ *     specified by redirect_uri. If true, the user will not be automatically
+ *     redirected and will have to approve the app again..
+ *
+ * @param {Object} options
+ * @return {Object}
+ * @api protected
+ */
+Strategy.prototype.authorizationParams = function(options) {
+  var params = {};
+
+  if (options.showDialog) {
+    params.show_dialog = options.showDialog;
+  }
+
+  return params;
 };
 
 /**

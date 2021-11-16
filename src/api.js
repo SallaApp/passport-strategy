@@ -1,6 +1,6 @@
 const InternalOAuthError = require("passport-oauth").InternalOAuthError;
 const oauth2RefreshToken = require("passport-oauth2-refresh");
-const Strategy = require("./auth-strategy");
+const Strategy = require("./strategy");
 // Salla API endpoint
 const _getOrdersURL = "https://api.salla.dev/admin/v2/orders";
 const _getCustomersURL = "https://api.salla.dev/admin/v2/customers";
