@@ -40,7 +40,7 @@ For more information about Salla's OAuth 2.0 implementation, check our
 
 Salla authentication strategy authenticates users using a Salla Merchant Account
 and OAuth 2.0 tokens. This strategy requires a `verify` callback, which accepts
-these credentials, and calls `done` providing a user as well as `options`
+these credentials and calls `done` providing a user as well as `options`
 specifying a client ID, client secret, and callback URL.
 
 ```javascript
@@ -146,7 +146,7 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 
 ## Contributing
 
-Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. 
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. 
 Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request. 
@@ -162,7 +162,7 @@ You can also simply open an issue with the tag "enhancement". Don't forget to gi
 
 ## Security
 
-If you discover any securitysrelated issues, please email security@salla.sa instead of using the issue tracker.
+If you discover any securitys-related issues, please email security@salla.sa instead of using the issue tracker.
 
 ## Credits
 
