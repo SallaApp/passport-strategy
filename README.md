@@ -30,7 +30,7 @@ For more information about Salla's OAuth 2.0 implementation, check our
 
 ## Installation
 
-    $ npm install @salla/passport-salla
+    $ npm install @salla.sa/passport-strategy
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
