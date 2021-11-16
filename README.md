@@ -46,17 +46,16 @@ specifying a client ID, client secret, and callback URL.
 ```javascript
 const express = require("express");
 const passport = require("passport");
-const SallaAPIFactory = require("passport-salla");
+const SallaAPIFactory = require("@salla.sa/passport-strategy");
 const app = express();
 
 const port = 8081;
 
 // we initialize our Salla API
 const SallaAPI = new SallaAPIFactory({
-  clientID: CLIENT_ID,
-  clientSecret: CLIENT_SECRET,
-  // Salla don't allow ports in redirect url ... make sure the redirect url is on port 80
-  callbackURL: "http://localhost:8081/oauth/callback",
+  clientID: 'CLIENT_ID',  // The client ID assigned to you by Salla in Salla Partner Portal
+  clientSecret: 'CLIENT_SECRET', // The client password assigned to you by Salla in Salla Partner Portal
+  callbackURL: "http://localhost:8081/oauth/callback", // the /oauth/callback in your service
 });
 
 //   Use the Salla Strategy within Passport.
