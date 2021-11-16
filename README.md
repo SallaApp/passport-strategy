@@ -4,7 +4,7 @@
     <img src="https://salla.dev/wp-content/themes/salla-portal/dist/img/salla-logo.svg" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Salla OAuth 2.0 - Passport Strategy</h3>
+<h1 align="center">Salla OAuth 2.0 - Passport Strategy</h1>
   <p align="center">
     <a href="http://passportjs.org/">Passport</a> strategy is used with <a href="http://salla.sa/">Salla</a> as an authentication middleware module
 using the OAuth 2.0 API.
@@ -15,7 +15,7 @@ using the OAuth 2.0 API.
   </p>
 </div>
 
-# Passport Strategy
+# Overview
 
 This module enables you to implement the authentication process using Salla within your Nodejs applications. 
 By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application 
