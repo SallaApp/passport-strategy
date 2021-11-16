@@ -2,12 +2,12 @@
   "name": "passport-salla-examples-login",
   "version": "0.0.1",
   "dependencies": {
+    "@salla.sa/passport-strategy": "~1.0",
     "consolidate": "~0.15.1",
     "dotenv": "8.2.0",
     "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "nunjucks": "^3.2.2",
-    "passport": "~0.4.1",
-    "@salla.sa/passport-strategy": "~1.0"
+    "express-session": "^1.17.2",
+    "nunjucks": "^3.2.3",
+    "passport": "~0.4.1"
   }
 }
