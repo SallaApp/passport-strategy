@@ -99,7 +99,7 @@ app.listen(port, function () {
 Refresh tokens can be received by calling SallaAPI.refreshToken() function, which returns a Promies.
 
 ```javascript
-const SallaAPI = require("passport-salla");
+const SallaAPI = require("@salla.sa/passport-strategy");
 
 SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
   .then((token) => {
