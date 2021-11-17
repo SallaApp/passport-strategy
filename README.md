@@ -110,7 +110,7 @@ SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
 
 ## Examples
 
-For a complete, working example, refer to the [login example](#Examples), you can get your keys on [Salla Partner - My Applications](https://salla.partners]).
+For a complete, working example, refer to the [login example](#Examples), you can get your keys on [Salla Partners > My Applications](https://salla.partners]).
 
 Getting All Orders from the store
 
