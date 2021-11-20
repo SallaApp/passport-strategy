@@ -17,8 +17,8 @@ using the OAuth 2.0 API.
 
 # Overview
 
-This module enables you to implement the authentication process using Salla within your Nodejs applications. 
-By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application 
+This module enables you to implement the authentication process using Salla within your Nodejs applications.
+By plugging it into Passport, Salla authentication can be quickly and unobtrusively implemented into any application
 or framework that supports [connect-style](http://www.senchalabs.org/connect) middleware, including [Express.js](http://expressjs.com), by plugging it into Passport.
 
 For more information about Salla's OAuth 2.0 implementation, check our
@@ -53,13 +53,23 @@ const port = 8081;
 
 // we initialize our Salla API
 const SallaAPI = new SallaAPIFactory({
-  clientID: 'CLIENT_ID',  // The client ID assigned to you by Salla in Salla Partner Portal
-  clientSecret: 'CLIENT_SECRET', // The client password assigned to you by Salla in Salla Partner Portal
+  clientID: "CLIENT_ID", // The client ID assigned to you by Salla in Salla Partner Portal
+  clientSecret: "CLIENT_SECRET", // The client password assigned to you by Salla in Salla Partner Portal
   callbackURL: "http://localhost:8081/oauth/callback", // the /oauth/callback in your service
 });
 
-//   Use the Salla Strategy within Passport.
+// Use the Salla Strategy within Passport.
 passport.use(SallaAPI.getPassportStrategy());
+
+// save token and user data to your selected database
+SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
+  /*
+    accessToken
+    refreshToken 
+    expires_in
+    user
+  */
+});
 
 // GET /
 // render the index page
@@ -140,15 +150,15 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 
     $ npm install --dev
     $ npm test
-    
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. 
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
 Any contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. 
+If you have a suggestion that would make this better, please fork the repo and create a pull request.
 You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project

@@ -6,11 +6,17 @@ const _getOrdersURL = "https://api.salla.dev/admin/v2/orders";
 const _getCustomersURL = "https://api.salla.dev/admin/v2/customers";
 const _getUserURL = "https://accounts.salla.sa/oauth2/user/info";
 class API {
+  _expires_in = null;
+  _refresh_token = null;
+  _strategy = null;
+  _token = null;
+  _onAuthCallback = null;
   /**
    * `API` constructor.
    *
    * @api public
    */
+
   constructor({ clientID, clientSecret, callbackURL }) {
     this._strategy = new Strategy(
       {
@@ -21,6 +27,8 @@ class API {
       async (accessToken, refreshToken, expires_in, user, done) => {
         this.setAccessToken(accessToken, refreshToken, expires_in);
 
+        if (this._onAuthCallback)
+          this._onAuthCallback(accessToken, refreshToken, expires_in, user);
         // asynchronous verification, for effect...
         process.nextTick(function () {
           // To keep the example simple, the user's salla user is returned to
@@ -306,6 +314,10 @@ class API {
         }
       );
     });
+  }
+
+  onAuth(cb) {
+    this._onAuthCallback = cb;
   }
 }
 

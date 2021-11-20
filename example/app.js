@@ -44,6 +44,10 @@ const SallaAPI = new SallaAPIFactory({
 //   Use the Salla Strategy within Passport.
 passport.use(SallaAPI.getPassportStrategy());
 
+SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
+  // save token and user data to your selected database
+});
+
 var app = express();
 
 // configure Express
@@ -73,7 +77,7 @@ app.engine("html", consolidate.nunjucks);
 //   request. The first step in salla authentication will involve redirecting
 //   the user to accounts.salla.sa. After authorization, salla will redirect the user
 //   back to this application at /oauth/callback
-app.get("/oauth/redirect", passport.authenticate("salla"));
+app.get(["/oauth/redirect", "/login"], passport.authenticate("salla"));
 
 // GET /oauth/callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -138,7 +142,6 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
     isLogin: req.user,
   });
 });
-
 
 // GET /logout
 //   logout from passport
