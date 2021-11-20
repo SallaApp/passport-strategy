@@ -112,8 +112,8 @@ Refresh tokens can be received by calling SallaAPI.refreshToken() function, whic
 const SallaAPI = require("@salla.sa/passport-strategy");
 
 SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
-  .then((token) => {
-    // save new token
+  .then(({ accessToken, newRefreshToken }) => {
+    // save new access token and refresh token to your database
   })
   .catch((err) => res.send(err));
 ```

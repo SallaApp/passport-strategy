@@ -114,9 +114,10 @@ app.get("/account", ensureAuthenticated, function (req, res) {
 
 app.get("/refreshToken", ensureAuthenticated, function (req, res) {
   SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
-    .then((token) => {
+    .then(({ accessToken, newRefreshToken }) => {
       res.render("token.html", {
-        token,
+        accessToken,
+        newRefreshToken,
         isLogin: req.user,
       });
     })
