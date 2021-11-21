@@ -1,4 +1,3 @@
-const InternalOAuthError = require("passport-oauth").InternalOAuthError;
 const oauth2RefreshToken = require("passport-oauth2-refresh");
 const Strategy = require("./strategy");
 // Salla API endpoint
@@ -43,7 +42,12 @@ class API {
     );
     oauth2RefreshToken.use(this._strategy);
   }
-
+  __resetToken() {
+    this._expires_in = null;
+    this._refresh_token = null;
+    this._token = null;
+    this._user = null;
+  }
   getPassportStrategy() {
     return this._strategy;
   }
@@ -70,6 +74,17 @@ class API {
     if (user) this._user = user;
     return this;
   }
+  /**
+   * using setExpressVerify authentication without depending on sessions by passport
+   *
+   *
+   * Examples:
+   *
+   *     app.use((req, res, next) => API.setExpressVerify(req, res, next));
+   *
+   * @return null (express chain next)
+   * @api public
+   */
   setExpressVerify(req, res, next) {
     if (req.originalUrl == "/login" || req.originalUrl.search("/oauth") > -1)
       return next();
@@ -138,19 +153,18 @@ class API {
         headers,
         "",
         "",
-        function (err, body, res) {
+        (err, body, res) => {
           if (err) {
-            throw Error(
-              new InternalOAuthError("failed to fetch StoreData", err)
-            );
+            this.__resetToken();
+            return reject({ msg: "failed to fetch StoreData", err });
           }
 
           try {
             var json = JSON.parse(body);
 
             resolve(json.data);
-          } catch (e) {
-            throw Error("failed to parse Data ", e);
+          } catch (err) {
+            reject({ msg: "failed to parse Data", err });
           }
         }
       );
@@ -184,11 +198,10 @@ class API {
         headers,
         "",
         "",
-        function (err, body, res) {
+        (err, body, res) => {
           if (err) {
-            throw Error(
-              new InternalOAuthError("failed to fetch StoreData", err)
-            );
+            this.__resetToken();
+            return reject({ msg: "failed to fetch StoreData", err });
           }
 
           try {
@@ -209,8 +222,8 @@ class API {
                 return json.data.store.name;
               },
             });
-          } catch (e) {
-            throw Error("failed to parse Data ", e);
+          } catch (err) {
+            reject({ msg: "failed to parse Data", err });
           }
         }
       );
@@ -241,19 +254,18 @@ class API {
         headers,
         "",
         "",
-        function (err, body, res) {
+        (err, body, res) => {
           if (err) {
-            throw Error(
-              new InternalOAuthError("failed to fetch StoreData", err)
-            );
+            this.__resetToken();
+            return reject({ msg: "failed to fetch StoreData ", err });
           }
 
           try {
             var json = JSON.parse(body);
 
             resolve(json.data);
-          } catch (e) {
-            throw Error("failed to parse Data ", e);
+          } catch (err) {
+            reject({ msg: "failed to parse Data ", err });
           }
         }
       );
@@ -279,6 +291,7 @@ class API {
         refreshToken,
         (err, accessToken, newRefreshToken) => {
           if (err) {
+            this.__resetToken();
             return reject({ msg: "Error Refreshing Your Token", err });
           }
           // You have a new access token, store it in the user object, and save it to the database
@@ -313,19 +326,18 @@ class API {
         headers,
         "",
         "",
-        function (err, body, res) {
+        (err, body, res) => {
           if (err) {
-            throw Error(
-              new InternalOAuthError("failed to fetch StoreData", err)
-            );
+            this.__resetToken();
+            return reject(err);
           }
 
           try {
             var json = JSON.parse(body);
 
             resolve(json.data);
-          } catch (e) {
-            throw Error("failed to parse Data ", e);
+          } catch (err) {
+            reject({ msg: "failed to parse Data ", err });
           }
         }
       );
