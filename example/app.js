@@ -1,7 +1,7 @@
 const express = require("express"),
   session = require("express-session"),
   passport = require("passport"),
-  SallaAPIFactory = require("@salla.sa/passport-strategy"),
+  SallaAPIFactory = require("../src/init"),
   consolidate = require("consolidate");
 
 require("dotenv").config();
@@ -48,6 +48,18 @@ SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
   // save token and user data to your selected database
 });
 
+/*
+  when your user login to your application you can retrieve the access token and use
+  it to access the Salla APIs from SallaAPI.setAccessToken  .
+  
+  SallaAPI.setAccessToken(
+    ACCESS_TOKEN_FROM_DATABASE,
+    REFRESH_TOKEN_FROM_DATABASE,
+    EXPIRES_IN_FROM_DATABASE,
+    USER_PROFILE_FROM_DATABASE
+  );
+
+*/
 var app = express();
 
 // configure Express
@@ -71,6 +83,9 @@ app.use(express.static(__dirname + "/public"));
 // set the render engine to nunjucks
 
 app.engine("html", consolidate.nunjucks);
+
+// we set salla express middleware
+app.use((req, res, next) => SallaAPI.setExpressVerify(req, res, next));
 
 // GET /oauth/redirect
 //   Use passport.authenticate() as route middleware to authenticate the

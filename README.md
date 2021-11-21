@@ -71,6 +71,22 @@ SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
   */
 });
 
+/*
+  when your user login to your application you can retrieve the access token and use
+  it to access the Salla APIs from SallaAPI.setAccessToken   .
+  
+  SallaAPI.setAccessToken(
+    ACCESS_TOKEN_FROM_DATABASE,
+    REFRESH_TOKEN_FROM_DATABASE,
+    EXPIRES_IN_FROM_DATABASE,
+    USER_PROFILE_FROM_DATABASE
+  );
+
+*/
+
+// we set salla express middleware
+app.use((req, res, next) => SallaAPI.setExpressVerify(req, res, next));
+
 // GET /
 // render the index page
 
@@ -97,6 +113,7 @@ app.get(
     res.redirect("/");
   }
 );
+
 app.listen(port, function () {
   console.log("App is listening on port " + port);
 });

@@ -11,6 +11,7 @@ class API {
   _strategy = null;
   _token = null;
   _onAuthCallback = null;
+  _user = null;
   /**
    * `API` constructor.
    *
@@ -30,11 +31,12 @@ class API {
         if (this._onAuthCallback)
           this._onAuthCallback(accessToken, refreshToken, expires_in, user);
         // asynchronous verification, for effect...
-        process.nextTick(function () {
+        process.nextTick(() => {
           // To keep the example simple, the user's salla user is returned to
           // represent the logged-in user. In a typical application, you would want
           // to associate the salla account with a user record in your database,
           // and return that user instead.
+          this._user = user;
           return done(null, user);
         });
       }
@@ -61,11 +63,25 @@ class API {
    * @return {API} for chaining
    * @api public
    */
-  setAccessToken(token, _refresh_token, expires_in) {
+  setAccessToken(token, _refresh_token, expires_in, user) {
     this._token = token;
     this._refresh_token = _refresh_token;
     if (expires_in) this._expires_in = expires_in;
+    if (user) this._user = user;
     return this;
+  }
+  setExpressVerify(req, res, next) {
+    if (req.originalUrl == "/login" || req.originalUrl.search("/oauth") > -1)
+      return next();
+
+    if (typeof this._token == "string" && this._token.length > 0) {
+      req.query = {
+        code: this._token,
+      };
+      req.user = this._user;
+    }
+
+    next();
   }
   /**
    * get  Access Token

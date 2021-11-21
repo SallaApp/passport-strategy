@@ -6,7 +6,7 @@ var util = require("util"),
   OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 
 const { generateRandomeString } = require("./helpers/generate-random-string");
-const {InternalOAuthError} = require('passport-oauth');
+const { InternalOAuthError } = require("passport-oauth");
 /**
  * `Strategy` constructor.
  *
@@ -148,7 +148,7 @@ Strategy.prototype.userProfile = function (accessToken, done) {
  * @return {Object}
  * @api protected
  */
-Strategy.prototype.authorizationParams = function(options) {
+Strategy.prototype.authorizationParams = function (options) {
   var params = {};
 
   if (options.showDialog) {
