@@ -162,6 +162,7 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 // GET /logout
 //   logout from passport
 app.get("/logout", function (req, res) {
+  SallaAPI.logout();
   req.logout();
   res.redirect("/");
 });

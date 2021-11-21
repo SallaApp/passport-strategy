@@ -42,6 +42,9 @@ class API {
     );
     oauth2RefreshToken.use(this._strategy);
   }
+  logout() {
+    this.__resetToken();
+  }
   __resetToken() {
     this._expires_in = null;
     this._refresh_token = null;
