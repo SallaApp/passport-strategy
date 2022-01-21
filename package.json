@@ -10,7 +10,8 @@
   ],
   "main": "./src/init.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "prepare": "husky install"
   },
   "dependencies": {
     "passport-oauth": "1.0.0",
@@ -19,6 +20,7 @@
     "util": "~0.12.0"
   },
   "devDependencies": {
+    "husky": "^7.0.4",
     "mocha": "^8.2.1",
     "should": "13.2.3",
     "sinon": "7.4.2"
