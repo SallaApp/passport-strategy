@@ -159,7 +159,7 @@ class API {
         (err, body, res) => {
           if (err) {
             this.__resetToken();
-            return reject({ msg: "failed to fetch StoreData", err });
+            return reject({ msg: "failed to fetch Data", err });
           }
 
           try {
@@ -183,8 +183,8 @@ class API {
    *     API.getResourceOwner();
    *     API.getResourceOwner().then(user=>console.log(user.getId()));
    *     API.getResourceOwner().then(user=>console.log(user.getName()));
-   *     API.getResourceOwner().then(user=>console.log(user.getStoreID()));
-   *     API.getResourceOwner().then(user=>console.log(user.getStoreName()));
+   *     API.getResourceOwner().then(user=>console.log(user.getMerchantID()));
+   *     API.getResourceOwner().then(user=>console.log(user.getMerchantName()));
    *
    * @return {Object}
    * @api public
@@ -204,7 +204,7 @@ class API {
         (err, body, res) => {
           if (err) {
             this.__resetToken();
-            return reject({ msg: "failed to fetch StoreData", err });
+            return reject({ msg: "failed to fetch MerchantData", err });
           }
 
           try {
@@ -218,11 +218,11 @@ class API {
               getName: () => {
                 return json.data.name;
               },
-              getStoreID: () => {
-                return json.data.store.id;
+              getMerchantID: () => {
+                return json.data.merchant.id;
               },
-              getStoreName: () => {
-                return json.data.store.name;
+              getMerchantName: () => {
+                return json.data.merchant.name;
               },
             });
           } catch (err) {
@@ -260,7 +260,7 @@ class API {
         (err, body, res) => {
           if (err) {
             this.__resetToken();
-            return reject({ msg: "failed to fetch StoreData ", err });
+            return reject({ msg: "failed to fetch Data ", err });
           }
 
           try {
