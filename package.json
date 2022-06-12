@@ -23,7 +23,7 @@
     "husky": "^7.0.4",
     "mocha": "^8.2.1",
     "should": "13.2.3",
-    "sinon": "7.4.2"
+    "sinon": "14.0.0"
   },
   "license": "MIT",
   "directories": {
