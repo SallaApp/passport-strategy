@@ -137,7 +137,7 @@ SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
 
 ## Examples
 
-For a complete, working example, refer to the [login example](#Examples), you can get your keys on [Salla Partners > My Applications](https://salla.partners]).
+For a complete, working example, refer to the [login example](#Examples), you can get your keys on [Salla Partners > My Apps](https://salla.partners]).
 
 Getting All Orders from the store
 
@@ -172,7 +172,7 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 
 ## Support
 
-The team is always here to help you. Happen to face an issue? Want to report a bug? You can submit one here on Github using the [Issue Tracker](https://github.com/SallaApp/Salla-CLI/issues/new). If you still have any questions, please contact us via the [Telegram Bot](https://t.me/SallaSupportBot) or join in the Global Developer Community on [Telegram](https://t.me/salladev).
+The team is always here to help you. Happen to face an issue? Want to report a bug? You can submit one here on Github using the [Issue Tracker](https://github.com/SallaApp/Salla-CLI/issues/new). If you still have any questions, please contact us by joining the Global Developer Community on [Telegram](https://t.me/salladev) or via the [Support Email](mailto:support@salla.dev).
 
 ## Contributing
 
