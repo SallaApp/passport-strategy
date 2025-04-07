@@ -20,10 +20,10 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
-    "husky": "^9.1.7",
-    "mocha": "^11.0.1",
-    "should": "^13.2.3",
-    "sinon": "^19.0.2"
+    "husky": "9.1.7",
+    "mocha": "11.1.0",
+    "should": "13.2.3",
+    "sinon": "20.0.0"
   },
   "license": "MIT",
   "directories": {
