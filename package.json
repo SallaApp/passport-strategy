@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "husky": "9.1.7",
-    "mocha": "11.1.0",
+    "mocha": "11.4.0",
     "should": "13.2.3",
     "sinon": "20.0.0"
   },
