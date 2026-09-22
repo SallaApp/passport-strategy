@@ -93,9 +93,14 @@ class API {
             return next();
 
         if (typeof this._token == "string" && this._token.length > 0) {
-            req.query = {
-                code: this._token,
-            };
+            Object.defineProperty(req, "query", {
+                value: {
+                    code: this._token,
+                },
+                configurable: true,
+                enumerable: true,
+                writable: true,
+            });
             req.user = this._user;
         }
 

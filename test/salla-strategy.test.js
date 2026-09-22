@@ -1,6 +1,7 @@
 var should = require("should");
 var sinon = require("sinon");
 const SallaStrategy = require('../src/strategy');
+const SallaAPI = require('../src/api');
 
 describe("test Salla Strategy", function () {
   var strategy = new SallaStrategy(
@@ -306,5 +307,31 @@ describe("test Salla Strategy", function () {
         });
       });
     });
+  });
+});
+
+describe("Salla API Express middleware", function () {
+  it("supports Express 5 requests whose query property is getter-only", function () {
+    const api = new SallaAPI({
+      clientID: "ABC123",
+      clientSecret: "secret",
+      callbackURL: "https://example.com/oauth/callback",
+    });
+    const request = {
+      originalUrl: "/",
+      get query() {
+        return {};
+      },
+    };
+    const next = sinon.spy();
+
+    api.setAccessToken("access-token", "refresh-token", 3600, {
+      id: "merchant-user",
+    });
+
+    (() => api.setExpressVerify(request, {}, next)).should.not.throw();
+    request.query.code.should.equal("access-token");
+    request.user.should.eql({ id: "merchant-user" });
+    next.calledOnce.should.equal(true);
   });
 });
