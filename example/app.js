@@ -53,6 +53,7 @@ SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
   it to access the Salla APIs from SallaAPI.setAccessToken  .
   
   SallaAPI.setAccessToken(
+    req,
     ACCESS_TOKEN_FROM_DATABASE,
     REFRESH_TOKEN_FROM_DATABASE,
     EXPIRES_IN_FROM_DATABASE,
@@ -128,7 +129,7 @@ app.get("/account", ensureAuthenticated, function (req, res) {
 // get new access token
 
 app.get("/refreshToken", ensureAuthenticated, function (req, res) {
-  SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
+  SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken(req), req)
     .then(({ accessToken, newRefreshToken }) => {
       res.render("token.html", {
         accessToken,
@@ -144,7 +145,7 @@ app.get("/refreshToken", ensureAuthenticated, function (req, res) {
 
 app.get("/orders", ensureAuthenticated, async function (req, res) {
   res.render("orders.html", {
-    orders: await SallaAPI.getAllOrders(),
+    orders: await SallaAPI.getAllOrders(SallaAPI.getToken(req)),
     isLogin: req.user,
   });
 });
@@ -154,7 +155,7 @@ app.get("/orders", ensureAuthenticated, async function (req, res) {
 
 app.get("/customers", ensureAuthenticated, async function (req, res) {
   res.render("customers.html", {
-    customers: await SallaAPI.getAllCustomers(),
+    customers: await SallaAPI.getAllCustomers(SallaAPI.getToken(req)),
     isLogin: req.user,
   });
 });
@@ -162,7 +163,7 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 // GET /logout
 //   logout from passport
 app.get("/logout", function (req, res) {
-  SallaAPI.logout();
+  SallaAPI.logout(req);
   req.logout();
   res.redirect("/");
 });
