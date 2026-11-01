@@ -4,15 +4,17 @@ const Strategy = require("./strategy");
 const _getOrdersURL = "https://api.salla.dev/admin/v2/orders";
 const _getCustomersURL = "https://api.salla.dev/admin/v2/customers";
 const _getUserURL = "https://accounts.salla.sa/oauth2/user/info";
+const MISSING_TOKEN = { msg: "access token is required" };
+
 class API {
-    _expires_in = null;
-    _refresh_token = null;
     _strategy = null;
-    _token = null;
     _onAuthCallback = null;
-    _user = null;
     /**
      * `API` constructor.
+     *
+     * No authentication state is stored on the instance: tokens and user live
+     * in the request's own session (`req.session.salla`) or are passed
+     * explicitly on every call, so one instance is safe to share across users.
      *
      * @api public
      */
@@ -23,66 +25,65 @@ class API {
                 clientID,
                 clientSecret,
                 callbackURL,
+                passReqToCallback: true,
             },
-            async (accessToken, refreshToken, expires_in, user, done) => {
-                this.setAccessToken(accessToken, refreshToken, expires_in);
+            async (req, accessToken, refreshToken, expires_in, user, done) => {
+                this.setAccessToken(req, accessToken, refreshToken, expires_in, user);
 
                 if (this._onAuthCallback)
                     this._onAuthCallback(accessToken, refreshToken, expires_in, user);
                 // asynchronous verification, for effect...
                 process.nextTick(() => {
-                    // To keep the example simple, the user's salla user is returned to
-                    // represent the logged-in user. In a typical application, you would want
-                    // to associate the salla account with a user record in your database,
-                    // and return that user instead.
-                    this._user = user;
+                    // In a typical application, you would want to associate the
+                    // salla account with a user record in your database, and
+                    // return that user instead.
                     return done(null, user);
                 });
             }
         );
         oauth2RefreshToken.use(this._strategy);
     }
-    logout() {
-        this.__resetToken();
-    }
-    __resetToken() {
-        this._expires_in = null;
-        this._refresh_token = null;
-        this._token = null;
-        this._user = null;
+    /**
+     * Clear the Salla session data of the request's own session only.
+     *
+     * @param {Object} req express request
+     * @api public
+     */
+    logout(req) {
+        if (req && req.session) delete req.session.salla;
     }
     getPassportStrategy() {
         return this._strategy;
     }
     /**
-     * set the Access Token and Refresh Token for the API to work
-     *
+     * Store the Access Token, Refresh Token and user in the session of `req`.
      *
      * Examples:
      *
-     *     API.setAccessToken(....);
+     *     API.setAccessToken(req, token, refreshToken, expires_in, user);
      *
-     *
-     * @param {String} token
-     * @param {String} _refresh_token
-     * @param {Number} expires_in
-     * @param {Strategy} strategy
      * @return {API} for chaining
      * @api public
      */
-    setAccessToken(token, _refresh_token, expires_in, user) {
-        this._token = token;
-        this._refresh_token = _refresh_token;
-        if (expires_in) this._expires_in = expires_in;
-        if (user) this._user = user;
+    setAccessToken(req, token, refreshToken, expires_in, user) {
+        if (req && req.session) {
+            req.session.salla = {
+                token,
+                refreshToken,
+                expires_in: expires_in || null,
+                user: user || null,
+            };
+        }
         return this;
     }
     /**
-     * using setExpressVerify authentication without depending on sessions by passport
-     *
+     * Express middleware: restores `req.user` and `req.salla` from the current
+     * request's own session. Requests without a Salla session stay
+     * unauthenticated. Requires a session middleware (e.g. express-session).
      *
      * Examples:
      *
+     *     app.use(session({ ... }));
      *     app.use((req, res, next) => API.setExpressVerify(req, res, next));
      *
      * @return null (express chain next)
@@ -92,62 +93,58 @@ class API {
         if (req.originalUrl == "/login" || req.originalUrl.search("/oauth") > -1)
             return next();
 
-        if (typeof this._token == "string" && this._token.length > 0) {
-            req.query = {
-                code: this._token,
+        const salla = req.session && req.session.salla;
+        if (salla && typeof salla.token == "string" && salla.token.length > 0) {
+            req.salla = {
+                token: salla.token,
+                refreshToken: salla.refreshToken,
+                expires_in: salla.expires_in,
             };
-            req.user = this._user;
+            req.user = salla.user;
         }
 
         next();
     }
     /**
-     * get  Access Token
-     *
+     * get the Access Token of the request's session
      *
      * Examples:
      *
-     *     API.getToken();
+     *     API.getToken(req);
      *
-     *
-     * @return {AccessToken}
+     * @return {AccessToken|null}
      * @api public
      */
-    getToken() {
-        return this._token;
+    getToken(req) {
+        return (req && req.session && req.session.salla && req.session.salla.token) || null;
     }
     /**
-     * get Refresh Token
-     *
+     * get the Refresh Token of the request's session
      *
      * Examples:
      *
-     *     API.getRefreshToken();
+     *     API.getRefreshToken(req);
      *
-     *
-     * @return {RefreshToken}
+     * @return {RefreshToken|null}
      * @api public
      */
-    getRefreshToken() {
-        return this._refresh_token;
+    getRefreshToken(req) {
+        return (req && req.session && req.session.salla && req.session.salla.refreshToken) || null;
     }
     /**
-     * get resorce from the API
-     *
+     * get resorce from the API. `token` is required.
      *
      * Examples:
      *
-     *     API.fetchResource({ method:"GET", url:"https://api.salla.dev/admin/v2/orders", token:API.getToken()});
-     *     API.fetchResource({url:"https://api.salla.dev/admin/v2/orders"});
-     *
+     *     API.fetchResource({ method:"GET", url:"https://api.salla.dev/admin/v2/orders", token:API.getToken(req)});
      *
      * @return {Object}
      * @api public
      */
-    fetchResource({ method = "GET", url, token = this.getToken() }) {
-        var authorization = "Bearer " + (token || this.getToken());
+    fetchResource({ method = "GET", url, token }) {
+        if (!token) return Promise.reject(MISSING_TOKEN);
         var headers = {
-            Authorization: authorization,
+            Authorization: "Bearer " + token,
         };
         return new Promise((resolve, reject) => {
             this._strategy._oauth2._request(
@@ -158,7 +155,6 @@ class API {
                 "",
                 (err, body, res) => {
                     if (err) {
-                        this.__resetToken();
                         return reject({ msg: "failed to fetch Data", err });
                     }
 
@@ -174,25 +170,23 @@ class API {
         });
     }
     /**
-     * get resorce owner from the API
-     *
+     * get resorce owner from the API. `token` is required.
      *
      * Examples:
      *
-     *     API.getResourceOwner(API.getToken());
-     *     API.getResourceOwner();
-     *     API.getResourceOwner().then(user=>console.log(user.getId()));
-     *     API.getResourceOwner().then(user=>console.log(user.getName()));
-     *     API.getResourceOwner().then(user=>console.log(user.getMerchantID()));
-     *     API.getResourceOwner().then(user=>console.log(user.getMerchantName()));
+     *     API.getResourceOwner(API.getToken(req));
+     *     API.getResourceOwner(token).then(user=>console.log(user.getId()));
+     *     API.getResourceOwner(token).then(user=>console.log(user.getName()));
+     *     API.getResourceOwner(token).then(user=>console.log(user.getMerchantID()));
+     *     API.getResourceOwner(token).then(user=>console.log(user.getMerchantName()));
      *
      * @return {Object}
      * @api public
      */
     getResourceOwner(token) {
-        var authorization = "Bearer " + (token || this.getToken());
+        if (!token) return Promise.reject(MISSING_TOKEN);
         var headers = {
-            Authorization: authorization,
+            Authorization: "Bearer " + token,
         };
         return new Promise((resolve, reject) => {
             this._strategy._oauth2._request(
@@ -203,7 +197,6 @@ class API {
                 "",
                 (err, body, res) => {
                     if (err) {
-                        this.__resetToken();
                         return reject({ msg: "failed to fetch MerchantData", err });
                     }
 
@@ -247,22 +240,19 @@ class API {
         });
     }
     /**
-     * get all orders from the user store
-     *
+     * get all orders from the user store. `token` is required.
      *
      * Examples:
      *
-     *     API.getAllOrders(API.getToken());
-     *     API.getAllOrders();
-     *
+     *     API.getAllOrders(API.getToken(req));
      *
      * @return {Array}
      * @api public
      */
     getAllOrders(token) {
-        var authorization = "Bearer " + (token || this.getToken());
+        if (!token) return Promise.reject(MISSING_TOKEN);
         var headers = {
-            Authorization: authorization,
+            Authorization: "Bearer " + token,
         };
         return new Promise((resolve, reject) => {
             this._strategy._oauth2._request(
@@ -273,7 +263,6 @@ class API {
                 "",
                 (err, body, res) => {
                     if (err) {
-                        this.__resetToken();
                         return reject({ msg: "failed to fetch Data ", err });
                     }
 
@@ -290,51 +279,50 @@ class API {
     }
 
     /**
-     * Refresh current token and get new token
-     *
+     * Refresh a token and get a new one. `refreshToken` is required; pass
+     * `req` to also update that request's own session.
      *
      * Examples:
      *
-     *     API.refreshToken();
-     *
+     *     API.requestNewAccessToken(API.getRefreshToken(req), req);
      *
      * @return {Promise}
      * @api public
      */
-    requestNewAccessToken(refreshToken = this.getRefreshToken()) {
+    requestNewAccessToken(refreshToken, req) {
+        if (!refreshToken)
+            return Promise.reject({ msg: "refresh token is required" });
         return new Promise((resolve, reject) => {
             oauth2RefreshToken.requestNewAccessToken(
                 "salla",
                 refreshToken,
                 (err, accessToken, newRefreshToken) => {
                     if (err) {
-                        this.__resetToken();
                         return reject({ msg: "Error Refreshing Your Token", err });
                     }
-                    // You have a new access token, store it in the user object, and save it to the database
-                    this.setAccessToken(accessToken, newRefreshToken);
+                    if (req && req.session && req.session.salla) {
+                        req.session.salla.token = accessToken;
+                        req.session.salla.refreshToken = newRefreshToken;
+                    }
                     return resolve({ msg: "ok", accessToken, newRefreshToken });
                 }
             );
         });
     }
     /**
-     * get all customers from the user store
-     *
+     * get all customers from the user store. `token` is required.
      *
      * Examples:
      *
-     *     API.getAllCustomers(API.getToken());
-     *     API.getAllCustomers();
-     *
+     *     API.getAllCustomers(API.getToken(req));
      *
      * @return {Array}
      * @api public
      */
     getAllCustomers(token) {
-        var authorization = "Bearer " + (token || this.getToken());
+        if (!token) return Promise.reject(MISSING_TOKEN);
         var headers = {
-            Authorization: authorization,
+            Authorization: "Bearer " + token,
         };
         return new Promise((resolve, reject) => {
             this._strategy._oauth2._request(
@@ -345,7 +333,6 @@ class API {
                 "",
                 (err, body, res) => {
                     if (err) {
-                        this.__resetToken();
                         return reject(err);
                     }
 
