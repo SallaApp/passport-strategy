@@ -100,9 +100,11 @@ app.get(["/oauth/redirect", "/login"], passport.authenticate("salla"));
 //   request. If authentication fails, the user will be redirected back to the
 //   login page. Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
+//   keepSessionInfo: true is required on passport >= 0.6: login regenerates
+//   the session, and without it the Salla tokens in req.session.salla are dropped.
 app.get(
   "/oauth/callback",
-  passport.authenticate("salla", { failureRedirect: "/login" }),
+  passport.authenticate("salla", { failureRedirect: "/login", keepSessionInfo: true }),
   function (req, res) {
     res.redirect("/");
   }
