@@ -53,6 +53,7 @@ SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
   it to access the Salla APIs from SallaAPI.setAccessToken  .
   
   SallaAPI.setAccessToken(
+    req,
     ACCESS_TOKEN_FROM_DATABASE,
     REFRESH_TOKEN_FROM_DATABASE,
     EXPIRES_IN_FROM_DATABASE,
@@ -99,9 +100,11 @@ app.get(["/oauth/redirect", "/login"], passport.authenticate("salla"));
 //   request. If authentication fails, the user will be redirected back to the
 //   login page. Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
+//   keepSessionInfo: true is required on passport >= 0.6: login regenerates
+//   the session, and without it the Salla tokens in req.session.salla are dropped.
 app.get(
   "/oauth/callback",
-  passport.authenticate("salla", { failureRedirect: "/login" }),
+  passport.authenticate("salla", { failureRedirect: "/login", keepSessionInfo: true }),
   function (req, res) {
     res.redirect("/");
   }
@@ -128,7 +131,7 @@ app.get("/account", ensureAuthenticated, function (req, res) {
 // get new access token
 
 app.get("/refreshToken", ensureAuthenticated, function (req, res) {
-  SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken())
+  SallaAPI.requestNewAccessToken(SallaAPI.getRefreshToken(req), req)
     .then(({ accessToken, newRefreshToken }) => {
       res.render("token.html", {
         accessToken,
@@ -144,7 +147,7 @@ app.get("/refreshToken", ensureAuthenticated, function (req, res) {
 
 app.get("/orders", ensureAuthenticated, async function (req, res) {
   res.render("orders.html", {
-    orders: await SallaAPI.getAllOrders(),
+    orders: await SallaAPI.getAllOrders(SallaAPI.getToken(req)),
     isLogin: req.user,
   });
 });
@@ -154,7 +157,7 @@ app.get("/orders", ensureAuthenticated, async function (req, res) {
 
 app.get("/customers", ensureAuthenticated, async function (req, res) {
   res.render("customers.html", {
-    customers: await SallaAPI.getAllCustomers(),
+    customers: await SallaAPI.getAllCustomers(SallaAPI.getToken(req)),
     isLogin: req.user,
   });
 });
@@ -162,7 +165,7 @@ app.get("/customers", ensureAuthenticated, async function (req, res) {
 // GET /logout
 //   logout from passport
 app.get("/logout", function (req, res) {
-  SallaAPI.logout();
+  SallaAPI.logout(req);
   req.logout();
   res.redirect("/");
 });

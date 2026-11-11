@@ -73,9 +73,10 @@ SallaAPI.onAuth((accessToken, refreshToken, expires_in, user) => {
 
 /*
   when your user login to your application you can retrieve the access token and use
-  it to access the Salla APIs from SallaAPI.setAccessToken   .
+  it to access the Salla APIs from SallaAPI.setAccessToken (stored in that request's session).
   
   SallaAPI.setAccessToken(
+    req,
     ACCESS_TOKEN_FROM_DATABASE,
     REFRESH_TOKEN_FROM_DATABASE,
     EXPIRES_IN_FROM_DATABASE,
@@ -106,9 +107,11 @@ app.get("/oauth/redirect", passport.authenticate("salla"));
 //   request. If authentication fails, the user will be redirected back to the
 //   login page. Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
+//   keepSessionInfo: true is required on passport >= 0.6: login regenerates
+//   the session, and without it the Salla tokens in req.session.salla are dropped.
 app.get(
   "/oauth/callback",
-  passport.authenticate("salla", { failureRedirect: "/login" }),
+  passport.authenticate("salla", { failureRedirect: "/login", keepSessionInfo: true }),
   function (req, res) {
     res.redirect("/");
   }
@@ -204,3 +207,15 @@ If you discover any securitys-related issues, please email security@salla.sa ins
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Migrating to 2.0.0 (security fix, breaking)
+
+Earlier versions kept the access token, refresh token and user on the `API` instance, so one logged-in user's identity and token leaked to every other request sharing that instance (CWE-287). 2.0.0 stores no auth state on the instance:
+
+- A session middleware (e.g. `express-session`) is required **before** `setExpressVerify`; credentials are kept in `req.session.salla`.
+- On passport >= 0.6, the callback route **must** use `passport.authenticate("salla", { keepSessionInfo: true })`. Passport regenerates the session at login, and without this option the Salla tokens are dropped.
+- `setExpressVerify` sets `req.user` and `req.salla` (`{token, refreshToken, expires_in}`) only from the request's own session, and no longer overwrites `req.query`.
+- `setAccessToken(req, token, refreshToken, expires_in, user)`, `getToken(req)`, `getRefreshToken(req)`, `logout(req)` now take `req`.
+- `fetchResource`, `getResourceOwner`, `getAllOrders`, `getAllCustomers` require an explicit token (`API.getAllOrders(API.getToken(req))`); there is no implicit fallback and they reject if it is missing.
+- `requestNewAccessToken(refreshToken, req)` requires the refresh token; pass `req` to update that session.
+- Errors and refresh failures no longer reset any shared state.

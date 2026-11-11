@@ -78,7 +78,13 @@ function Strategy(options, verify) {
       function (error, data, response) {
         if (error) callback(error);
         else {
-          var results = JSON.parse(data);
+          // a 2xx non-JSON body must not throw here: it would crash the process
+          var results;
+          try {
+            results = JSON.parse(data);
+          } catch (e) {
+            return callback(e);
+          }
 
           var access_token = results.access_token;
           var refresh_token = results.refresh_token;
