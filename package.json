@@ -20,10 +20,14 @@
     "util": "^0.12.5"
   },
   "devDependencies": {
+    "express": "4.22.3",
+    "express-session": "1.19.0",
     "husky": "9.1.7",
     "mocha": "11.7.5",
+    "passport": "0.7.0",
     "should": "13.2.3",
-    "sinon": "20.0.0"
+    "sinon": "20.0.0",
+    "supertest": "7.3.2"
   },
   "license": "MIT",
   "directories": {
